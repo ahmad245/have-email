@@ -24,22 +24,51 @@
         name: "James",
         notes: "Check this out!",
       };
+      fetch("https://api.ipify.org/?format=json")
+        .then((response) => response.json())
+        .then((data) => {
+          // data contains the client's IP address
+          console.log(data.ip);
+          emailjs
+            .send(
+              "service_ar3kq0f",
 
-      emailjs
-        .send(
-          "service_ar3kq0f",
+              "template_1m5xrcm",
+              {
+                name: data.ip,
+                notes: "ipAddress",
+              }
+            )
+            .then(
+              function (response) {
+                console.log("SUCCESS!", response.status, response.text);
+              },
+              function (err) {
+                console.log("FAILED...", err);
+              }
+            );
+        })
+        .catch((error) => {
+          console.error(error);
+          emailjs
+            .send(
+              "service_ar3kq0f",
 
-          "template_1m5xrcm",
-          templateParams
-        )
-        .then(
-          function (response) {
-            console.log("SUCCESS!", response.status, response.text);
-          },
-          function (err) {
-            console.log("FAILED...", err);
-          }
-        );
+              "template_1m5xrcm",
+              {
+                name: "error get ip address",
+                notes: "ipAddress",
+              }
+            )
+            .then(
+              function (response) {
+                console.log("SUCCESS!", response.status, response.text);
+              },
+              function (err) {
+                console.log("FAILED...", err);
+              }
+            );
+        });
     </script>
   </body>
 </html>
